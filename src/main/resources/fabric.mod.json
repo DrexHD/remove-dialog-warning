@@ -1,0 +1,25 @@
+{
+	"schemaVersion": 1,
+	"id": "remove-dialog-warning",
+	"version": "${version}",
+	"name": "remove-dialog-warning",
+	"description": "Remove the dialog warning by replacing command actions with custom actions",
+	"authors": [
+		"Drex"
+	],
+	"license": "MIT",
+	"icon": "assets/remove-dialog-warning/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+          "me.drex.rdw.RemoveDialogWarning"
+		]
+	},
+	"mixins": [
+		"remove-dialog-warning.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.14",
+		"java": ">=21"
+	}
+}

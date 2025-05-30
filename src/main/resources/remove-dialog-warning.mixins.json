@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "me.drex.rdw.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ActionMixin",
+    "ParsedTemplateAccessor",
+    "ServerCommonPacketListenerImplMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+	}
+}
