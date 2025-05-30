@@ -1,6 +1,9 @@
+import org.jetbrains.changelog.Changelog
 plugins {
 	id 'fabric-loom' version '1.10-SNAPSHOT'
 	id 'maven-publish'
+	id "me.modmuss50.mod-publish-plugin" version "0.8.4"
+	id 'org.jetbrains.changelog' version '2.+'
 }
 
 version = project.mod_version
@@ -27,6 +30,21 @@ dependencies {
 
 	modImplementation include("xyz.nucleoid:packet-tweaker:0.6.0-pre.1+1.21.2-pre3")
 	
+}
+
+publishMods {
+	file = remapJar.archiveFile
+	type = STABLE
+	changelog = fetchChangelog()
+
+	displayName = "remove-dialog-warning ${version.get()}"
+	modLoaders.add("fabric")
+
+	github {
+		accessToken = providers.environmentVariable("GITHUB_TOKEN")
+		repository = providers.environmentVariable("GITHUB_REPOSITORY").getOrElse("DrexHD/dryrun")
+		commitish = providers.environmentVariable("GITHUB_REF_NAME").getOrElse("dryrun")
+	}
 }
 
 processResources {
@@ -74,5 +92,17 @@ publishing {
 		// Notice: This block does NOT have the same function as the block in the top level.
 		// The repositories here will be used for publishing your artifact, not for
 		// retrieving dependencies.
+	}
+}
+
+private String fetchChangelog() {
+	def log = getChangelog.changelog.get()
+	if (log.has(project.mod_version)) {
+		return log.renderItem(
+				log.get(project.mod_version).withHeader(false),
+				Changelog.OutputType.MARKDOWN
+		)
+	} else {
+		return ""
 	}
 }
