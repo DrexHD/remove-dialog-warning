@@ -25,7 +25,12 @@ public interface ActionMixin {
             target = "Lcom/mojang/serialization/Codec;dispatch(Ljava/util/function/Function;Ljava/util/function/Function;)Lcom/mojang/serialization/Codec;"
         )
     )
-    private static <A> Codec<Action> customCodec(Codec<Action> instance, Function<Action, ? extends A> type, Function<? super A, ? extends MapCodec<Action>> codec, Operation<Codec<Action>> original) {
+    private static <A> Codec<Action> customCodec(
+        Codec<Action> instance,
+        Function<Action, ? extends A> type,
+        Function<? super A, ? extends MapCodec<Action>> codec,
+        Operation<Codec<Action>> original
+    ) {
         return original.call(instance, type, codec).xmap(Function.identity(), action -> {
             PacketContext packetContext = PacketContext.get();
             if (packetContext != null && packetContext.getPlayer() != null) {
