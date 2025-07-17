@@ -6,7 +6,8 @@
     "ActionMixin",
     "ClickEventMixin",
     "ParsedTemplateAccessor",
-    "ServerCommonPacketListenerImplMixin"
+    "ServerCommonPacketListenerImplMixin",
+    "ServerConfigurationPacketListenerImplMixin"
   ],
   "injectors": {
     "defaultRequire": 1

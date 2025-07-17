@@ -33,19 +33,17 @@ public interface ActionMixin {
     ) {
         return original.call(instance, type, codec).xmap(Function.identity(), action -> {
             PacketContext packetContext = PacketContext.get();
-            if (packetContext != null && packetContext.getPlayer() != null) {
-                if (action instanceof CommandTemplate commandTemplate) {
-                    ParsedTemplate template = commandTemplate.template();
+            if (packetContext != null && packetContext.getClientConnection() != null) {
+                if (action instanceof CommandTemplate(ParsedTemplate template)) {
                     ParsedTemplateAccessor accessor = (ParsedTemplateAccessor) template;
                     CompoundTag tag = new CompoundTag();
                     tag.putString(COMMAND_KEY, accessor.getRaw());
                     tag.putBoolean(DYNAMIC_KEY, true);
                     return new CustomAll(DIALOG_ACTION_ID, Optional.of(tag));
-                } else if (action instanceof StaticAction staticAction) {
-                    ClickEvent clickEvent = staticAction.value();
-                    if (clickEvent instanceof ClickEvent.RunCommand runCommand) {
+                } else if (action instanceof StaticAction(ClickEvent value)) {
+                    if (value instanceof ClickEvent.RunCommand(String command)) {
                         CompoundTag tag = new CompoundTag();
-                        tag.putString(COMMAND_KEY, runCommand.command());
+                        tag.putString(COMMAND_KEY, command);
                         return new CustomAll(DIALOG_ACTION_ID, Optional.of(tag));
                     }
                 }

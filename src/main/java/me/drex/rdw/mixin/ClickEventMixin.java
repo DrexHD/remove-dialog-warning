@@ -34,10 +34,10 @@ public interface ClickEventMixin {
     ) {
         return original.call(instance, typeKey, type, codec).xmap(Function.identity(), clickEvent -> {
             PacketContext packetContext = PacketContext.get();
-            if (packetContext != null && packetContext.getPlayer() != null) {
-                if (clickEvent instanceof ClickEvent.RunCommand runCommand) {
+            if (packetContext != null && packetContext.getClientConnection() != null) {
+                if (clickEvent instanceof ClickEvent.RunCommand(String command)) {
                     CompoundTag tag = new CompoundTag();
-                    tag.putString(COMMAND_KEY, runCommand.command());
+                    tag.putString(COMMAND_KEY, command);
                     return new ClickEvent.Custom(DIALOG_ACTION_ID, Optional.of(tag));
                 }
             }
