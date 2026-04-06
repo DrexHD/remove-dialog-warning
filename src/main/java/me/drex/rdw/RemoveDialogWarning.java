@@ -2,7 +2,7 @@ package me.drex.rdw;
 
 import net.fabricmc.api.ModInitializer;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +13,7 @@ public class RemoveDialogWarning implements ModInitializer {
 
 	public static final String COMMAND_KEY = MOD_ID + ":command";
 	public static final String DYNAMIC_KEY = MOD_ID + ":dynamic";
-	public static final ResourceLocation DIALOG_ACTION_ID = ResourceLocation.fromNamespaceAndPath(MOD_ID, "run_command");
+	public static final Identifier DIALOG_ACTION_ID = Identifier.fromNamespaceAndPath(MOD_ID, "run_command");
 
 	@Override
 	public void onInitialize() {

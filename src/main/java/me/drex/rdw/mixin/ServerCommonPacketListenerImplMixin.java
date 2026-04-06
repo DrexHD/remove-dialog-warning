@@ -4,7 +4,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.functions.StringTemplate;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.common.ServerboundCustomClickActionPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerCommonPacketListenerImpl;
@@ -32,12 +32,12 @@ public abstract class ServerCommonPacketListenerImplMixin {
         method = "handleCustomClickAction",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/server/MinecraftServer;handleCustomClickAction(Lnet/minecraft/resources/ResourceLocation;Ljava/util/Optional;)V"
+            target = "Lnet/minecraft/server/MinecraftServer;handleCustomClickAction(Lnet/minecraft/resources/Identifier;Ljava/util/Optional;)V"
         ),
         cancellable = true
     )
     public void onHandleCustomClickAction(ServerboundCustomClickActionPacket packet, CallbackInfo ci) {
-        ResourceLocation id = packet.id();
+        Identifier id = packet.id();
         if (!id.equals(DIALOG_ACTION_ID)) return;
         if (!((Object) this instanceof ServerGamePacketListenerImpl game)) return;
         ServerPlayer player = game.player;
