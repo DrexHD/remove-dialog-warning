@@ -40,7 +40,7 @@ publishMods {
 
 	modrinth {
 		accessToken = providers.environmentVariable("MODRINTH_TOKEN")
-		projectId = "UL4bJFDY"
+		projectId = "xbRrTjLu"
 		minecraftVersions.addAll(project.modrinth_minecraft_versions.split(", "))
 	}
 
