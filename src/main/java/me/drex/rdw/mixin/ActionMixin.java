@@ -4,12 +4,12 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.server.dialog.action.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import xyz.nucleoid.packettweaker.PacketContext;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -33,7 +33,7 @@ public interface ActionMixin {
     ) {
         return original.call(instance, type, codec).xmap(Function.identity(), action -> {
             PacketContext packetContext = PacketContext.get();
-            if (packetContext != null && packetContext.getClientConnection() != null) {
+            if (packetContext != null && packetContext.get(PacketContext.CONNECTION) != null) {
                 if (action instanceof CommandTemplate(ParsedTemplate template)) {
                     ParsedTemplateAccessor accessor = (ParsedTemplateAccessor) template;
                     CompoundTag tag = new CompoundTag();

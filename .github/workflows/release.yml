@@ -6,14 +6,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up JDK 21
+      - name: setup jdk
         uses: actions/setup-java@v4
         with:
-          distribution: 'adopt'
-          java-version: 21
+          java-version: '25'
+          distribution: 'microsoft'
       - name: Make gradlew executable
         run: chmod +x ./gradlew
       - name: Publish mods
-        run: ./gradlew build publishMods
+        run: ./gradlew publishMods
         env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
