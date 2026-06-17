@@ -1,6 +1,6 @@
 import org.jetbrains.changelog.Changelog
 plugins {
-	id 'net.fabricmc.fabric-loom' version '1.16-SNAPSHOT'
+	id 'net.fabricmc.fabric-loom' version '1.17-SNAPSHOT'
 	id 'maven-publish'
 	id "me.modmuss50.mod-publish-plugin" version "1.1.0"
 	id 'org.jetbrains.changelog' version '2.+'
