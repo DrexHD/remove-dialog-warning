@@ -1,15 +1,16 @@
 {
-  "required": true,
-  "package": "me.drex.rdw.mixin",
-  "compatibilityLevel": "JAVA_21",
-  "mixins": [
-    "ActionMixin",
-    "ClickEventMixin",
-    "ParsedTemplateAccessor",
-    "ServerCommonPacketListenerImplMixin",
-    "ServerConfigurationPacketListenerImplMixin"
-  ],
-  "injectors": {
-    "defaultRequire": 1
+	"required": true,
+	"package": "me.drex.rdw.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"ActionMixin",
+		"ClickEventMixin",
+		"DialogMixin",
+		"ParsedTemplateAccessor",
+		"ServerCommonPacketListenerImplMixin",
+		"ServerConfigurationPacketListenerImplMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
 	}
 }

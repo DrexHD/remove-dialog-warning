@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2025-07-17
+### Fixed
+- Dynamic command variable substitution not matching vanilla
+
 ## [1.2.0] - 2025-07-17
 ### Fixed
 - Logic not running during registry synchronization

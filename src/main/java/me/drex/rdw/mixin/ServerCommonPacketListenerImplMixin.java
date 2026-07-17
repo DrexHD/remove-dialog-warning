@@ -2,6 +2,9 @@ package me.drex.rdw.mixin;
 
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.functions.StringTemplate;
+import net.minecraft.nbt.ByteTag;
+import net.minecraft.nbt.FloatTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.common.ServerboundCustomClickActionPacket;
 import net.minecraft.resources.Identifier;
@@ -43,17 +46,45 @@ public abstract class ServerCommonPacketListenerImplMixin {
         ServerPlayer player = game.player;
         packet.payload().flatMap(Tag::asCompound).ifPresent(root ->
             root.getString(COMMAND_KEY).ifPresent(command -> {
-                Map<String, String> templateVariables = new HashMap<>();
-                for (Map.Entry<String, Tag> child : root.entrySet()) {
-                    String key = child.getKey();
-                    Tag value = child.getValue();
-                    if (key.equals(COMMAND_KEY) || key.equals(DYNAMIC_KEY)) continue;
-                    templateVariables.put(key, value.toString());
-                }
-
-                boolean dynamic = root.getBooleanOr(DYNAMIC_KEY, false);
                 Commands commands = server.getCommands();
+                boolean dynamic = root.getBooleanOr(DYNAMIC_KEY, false);
                 if (dynamic) {
+                    Map<String, String> templateVariables = new HashMap<>();
+                    for (Map.Entry<String, Tag> child : root.entrySet()) {
+                        String key = child.getKey();
+                        Tag value = child.getValue();
+                        if (key.startsWith(MOD_ID + ":")) continue;
+
+                        // We cannot use the raw tag values. Some values need special treatment
+                        // Check ValueGetter.asTemplateSubstitution() vs ValueGetter.asTag()
+                        String templateVariable = switch (value) {
+                            case StringTag(String s) -> {
+                                boolean requiresEscapeWithoutQuotes = root.getListOrEmpty(STRING_INPUT_KEY)
+                                    .contains(StringTag.valueOf(key));
+                                if (requiresEscapeWithoutQuotes) {
+                                    yield StringTag.escapeWithoutQuotes(s);
+                                }
+                                yield s;
+                            }
+                            case ByteTag(byte b) -> {
+                                String k = (b == 0) ? "false" : "true";
+                                yield root.getCompoundOrEmpty(BOOLEAN_TAGS_KEY)
+                                    .getCompoundOrEmpty(key)
+                                    .getStringOr(k, k);
+                            }
+                            case FloatTag(float v) -> {
+                                int intV = (int) v;
+                                if ((float) intV == v) {
+                                    yield Integer.toString(intV);
+                                }
+                                yield Float.toString(v);
+                            }
+                            default -> throw new IllegalStateException("Unexpected value: " + value);
+                        };
+
+                        templateVariables.put(key, templateVariable);
+                    }
+
                     StringTemplate parsedTemplate = StringTemplate.fromString(command);
                     List<String> list = parsedTemplate.variables().stream().map(string -> templateVariables.getOrDefault(string, "")).toList();
                     command = parsedTemplate.substitute(list);
